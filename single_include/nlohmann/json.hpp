@@ -11023,7 +11023,7 @@ using parser_callback_t =
 
 This class implements a recursive descent parser.
 */
-template<template<typename, typename> class LexerType, typename BasicJsonType, typename InputAdapterType>
+template<typename BasicJsonType, typename InputAdapterType, template<typename, typename> class LexerType>
 class parser
 {
     using number_integer_t = typename BasicJsonType::number_integer_t;
@@ -17787,14 +17787,14 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     using lexer = ::nlohmann::detail::lexer_base<basic_json>;
 
     template<typename InputAdapterType>
-    static ::nlohmann::detail::parser<LexerType, basic_json, InputAdapterType> parser(
+    static ::nlohmann::detail::parser<basic_json, InputAdapterType, LexerType> parser(
         InputAdapterType adapter,
         detail::parser_callback_t<basic_json>cb = nullptr,
         const bool allow_exceptions = true,
         const bool ignore_comments = false
     )
     {
-        return ::nlohmann::detail::parser<LexerType, basic_json, InputAdapterType>(std::move(adapter),
+        return ::nlohmann::detail::parser<basic_json, InputAdapterType, LexerType>(std::move(adapter),
                 std::move(cb), allow_exceptions, ignore_comments);
     }
 
