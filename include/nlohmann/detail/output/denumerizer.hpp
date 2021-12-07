@@ -51,6 +51,12 @@ struct denumerizer
         }
     }
     
+    static number_unsigned_t remove_sign(number_unsigned_t x)
+    {
+        JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+        return x; // LCOV_EXCL_LINE
+    }
+    
     template <typename number_integral_t, typename number_unsigned_t =
         typename std::make_unsigned<
             number_integral_t>::type>
