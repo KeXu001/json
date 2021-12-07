@@ -21,7 +21,7 @@ namespace detail
 {
 
 struct denumerizer
-{   
+{
     using number_buffer_t = std::array<char, 64>;
     
     /*!
@@ -56,21 +56,21 @@ struct denumerizer
             n_digits += 4;
         }
     }
-    
+
     /*
      * Overload to make the compiler happy while it is instantiating
      * dump_integer for number_unsigned_t.
      * Must never be called.
      */
     template <typename number_unsigned_t,
-        detail::enable_if_t<
-            std::is_unsigned<number_unsigned_t>::value, int> = 0>
+              detail::enable_if_t<
+                  std::is_unsigned<number_unsigned_t>::value, int> = 0>
     static number_unsigned_t remove_sign(number_unsigned_t x) noexcept
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
         return x; // LCOV_EXCL_LINE
     }
-    
+
     /*
      * Helper function for dump_integer
      *
@@ -81,24 +81,24 @@ struct denumerizer
      * #1708 for details.
      */
     template <typename number_integer_t,
-        detail::enable_if_t<
-            std::is_signed<number_integer_t>::value, int> = 0,
-        typename number_unsigned_t =
-            typename std::make_unsigned<number_integer_t>::type>
+              detail::enable_if_t<
+                  std::is_signed<number_integer_t>::value, int> = 0,
+              typename number_unsigned_t =
+              typename std::make_unsigned<number_integer_t>::type>
     static number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
-    
+
     /*!
     @brief dump an integer
     Dump a given integer to output stream @a o.
     @param[in] x  integer number (signed or unsigned) to dump
     */
     template <typename OutputAdapterType, typename number_integral_t,
-        typename number_unsigned_t = typename std::make_unsigned<
-            number_integral_t>::type>
+              typename number_unsigned_t = typename std::make_unsigned<
+                  number_integral_t>::type>
     static void dump_integer(OutputAdapterType& o, number_integral_t x)
     {
         static constexpr std::array<std::array<char, 2>, 100> digits_to_99
@@ -178,15 +178,15 @@ struct denumerizer
 
         o->write_characters(number_buffer.data(), n_chars);
     }
-    
+
     /*!
     @brief dump a floating-point number
     Dump a given floating-point number to output stream @a o.
     @param[in] x  floating-point number to dump
     */
     template <typename OutputAdapterType, typename number_float_t,
-        detail::enable_if_t<
-            std::is_floating_point<number_float_t>::value, int> = 0>
+              detail::enable_if_t<
+                  std::is_floating_point<number_float_t>::value, int> = 0>
     static void dump_float(OutputAdapterType& o, number_float_t x)
     {
         // NaN / inf
@@ -207,7 +207,7 @@ struct denumerizer
 
         dump_float(o, x, std::integral_constant<bool, is_ieee_single_or_double>());
     }
-    
+
     template <typename OutputAdapterType, typename number_float_t,
         detail::enable_if_t<
             std::is_floating_point<number_float_t>::value, int> = 0>
@@ -220,18 +220,18 @@ struct denumerizer
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
     }
-    
+
     template <typename OutputAdapterType, typename number_float_t,
-        detail::enable_if_t<
-            std::is_floating_point<number_float_t>::value, int> = 0>
+              detail::enable_if_t<
+                  std::is_floating_point<number_float_t>::value, int> = 0>
     static void dump_float(OutputAdapterType& o, number_float_t x, std::false_type /*is_ieee_single_or_double*/)
     {
         number_buffer_t number_buffer{{}};
-        
+
         const std::lconv* loc(std::localeconv());
         const char thousands_sep(loc->thousands_sep == nullptr ? '\0' : std::char_traits<char>::to_char_type(* (loc->thousands_sep)));
         const char decimal_point(loc->decimal_point == nullptr ? '\0' : std::char_traits<char>::to_char_type(* (loc->decimal_point)));
-        
+
         // get number of digits for a float -> text -> float round-trip
         static constexpr auto d = std::numeric_limits<number_float_t>::max_digits10;
 
@@ -280,8 +280,7 @@ struct denumerizer
             o->write_characters(".0", 2);
         }
     }
-  
 };
-  
+
 }  // namespace detail
 }  // namespace nlohmann
