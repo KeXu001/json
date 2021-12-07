@@ -24,6 +24,12 @@ struct denumerizer
 {   
     using number_buffer_t = std::array<char, 64>;
     
+    /*!
+    @brief count digits
+    Count the number of decimal (base 10) digits for an input unsigned integer.
+    @param[in] x  unsigned integer number to count its digits
+    @return    number of decimal digits
+    */
     template <typename number_unsigned_t>
     static unsigned int count_digits(number_unsigned_t x) noexcept
     {
@@ -46,26 +52,50 @@ struct denumerizer
             {
                 return n_digits + 3;
             }
-            x = x / 10000u;
+            x = static_cast<number_unsigned_t>(x / 10000u);
             n_digits += 4;
         }
     }
     
-    static number_unsigned_t remove_sign(number_unsigned_t x)
+    /*
+     * Overload to make the compiler happy while it is instantiating
+     * dump_integer for number_unsigned_t.
+     * Must never be called.
+     */
+    template <typename number_unsigned_t,
+        detail::enable_if_t<
+            std::is_unsigned<number_unsigned_t>::value, int> = 0>
+    static number_unsigned_t remove_sign(number_unsigned_t x) noexcept
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
         return x; // LCOV_EXCL_LINE
     }
     
-    template <typename number_integral_t, typename number_unsigned_t =
-        typename std::make_unsigned<
-            number_integral_t>::type>
-    static number_unsigned_t remove_sign(number_integral_t x) noexcept
+    /*
+     * Helper function for dump_integer
+     *
+     * This function takes a negative signed integer and returns its absolute
+     * value as unsigned integer. The plus/minus shuffling is necessary as we can
+     * not directly remove the sign of an arbitrary signed integer as the
+     * absolute values of INT_MIN and INT_MAX are usually not the same. See
+     * #1708 for details.
+     */
+    template <typename number_integer_t,
+        detail::enable_if_t<
+            std::is_signed<number_integer_t>::value, int> = 0,
+        typename number_unsigned_t =
+            typename std::make_unsigned<number_integer_t>::type>
+    static number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
-        JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integral_t>::max)()); // NOLINT(misc-redundant-expression)
+        JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
     
+    /*!
+    @brief dump an integer
+    Dump a given integer to output stream @a o.
+    @param[in] x  integer number (signed or unsigned) to dump
+    */
     template <typename OutputAdapterType, typename number_integral_t,
         typename number_unsigned_t = typename std::make_unsigned<
             number_integral_t>::type>
@@ -149,7 +179,11 @@ struct denumerizer
         o->write_characters(number_buffer.data(), n_chars);
     }
     
-    
+    /*!
+    @brief dump a floating-point number
+    Dump a given floating-point number to output stream @a o.
+    @param[in] x  floating-point number to dump
+    */
     template <typename OutputAdapterType, typename number_float_t,
         detail::enable_if_t<
             std::is_floating_point<number_float_t>::value, int> = 0>
