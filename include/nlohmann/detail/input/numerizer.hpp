@@ -39,6 +39,5 @@ struct numerizer
     }
 };
 
- 
-}
-}
+}  // namespace detail
+}  // namespace nlohmann

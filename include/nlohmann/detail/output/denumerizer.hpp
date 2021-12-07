@@ -243,5 +243,5 @@ struct denumerizer
   
 };
   
-}
-}
+}  // namespace detail
+}  // namespace nlohmann
