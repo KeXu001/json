@@ -1,4 +1,5 @@
 
+#pragma once
 
 #include <algorithm> // reverse, remove, fill, find, none_of
 #include <array> // array

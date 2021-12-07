@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include <cstdlib> // strtof, strtod, strtold, strtoll, strtoull
 
 #include <nlohmann/detail/macro_scope.hpp>
