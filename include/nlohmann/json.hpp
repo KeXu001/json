@@ -179,9 +179,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<detail::value_t> friend struct detail::external_constructor;
     friend ::nlohmann::json_pointer<basic_json>;
 
-    template<typename BasicJsonType, typename InputType>
+    template<typename BasicJsonType, typename InputType, template<typename, typename> class>
     friend class ::nlohmann::detail::parser;
-    friend ::nlohmann::detail::serializer<basic_json>;
+    template<typename BasicJsonType, typename DenumerizerType>
+    friend class ::nlohmann::detail::serializer;
     template<typename BasicJsonType>
     friend class ::nlohmann::detail::iter_impl;
     template<typename BasicJsonType, typename CharType>
