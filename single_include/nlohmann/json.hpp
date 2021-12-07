@@ -3453,7 +3453,7 @@ class serializer;
 
 template<typename BasicJsonType>
 using basic_serializer = serializer<BasicJsonType, denumerizer>;
-}
+}  // namespace detail
 
 template<template<typename U, typename V, typename... Args> class ObjectType =
          std::map,
