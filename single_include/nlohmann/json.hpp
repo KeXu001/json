@@ -3455,6 +3455,7 @@ template<typename BasicJsonType>
 using basic_serializer = serializer<BasicJsonType, denumerizer>;
 }  // namespace detail
 
+// temporary workaround: use a typedef to avoid cppcheck alarm in basic_json template class declaration
 using vector_of_uint8_t = std::vector<std::uint8_t>;
 
 template<template<typename U, typename V, typename... Args>
