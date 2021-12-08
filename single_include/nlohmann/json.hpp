@@ -6666,6 +6666,7 @@ class json_sax_acceptor
 
 
 
+#include <cstdint> // uint64_t, int64_t
 #include <cstdlib> // strtof, strtod, strtold, strtoll, strtoull
 
 // #include <nlohmann/detail/macro_scope.hpp>
