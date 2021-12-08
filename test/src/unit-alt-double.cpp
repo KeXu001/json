@@ -29,6 +29,7 @@ SOFTWARE.
 
 #include "doctest_compatibility.h"
 
+#include <cmath>
 #include <limits>
 #include <string>
 #include <type_traits>
