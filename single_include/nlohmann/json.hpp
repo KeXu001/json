@@ -3455,6 +3455,8 @@ template<typename BasicJsonType>
 using basic_serializer = serializer<BasicJsonType, denumerizer>;
 }  // namespace detail
 
+using vector_of_uint8_t = std::vector<std::uint8_t>;
+
 template<template<typename U, typename V, typename... Args>
          class ObjectType = std::map,
          template<typename U, typename... Args>
@@ -3468,7 +3470,7 @@ template<template<typename U, typename V, typename... Args>
          class AllocatorType = std::allocator,
          template<typename T, typename SFINAE = void>
          class JSONSerializer = adl_serializer,
-         class BinaryType = std::vector<std::uint8_t>,
+         class BinaryType = vector_of_uint8_t,
          template<typename BasicJsonType, typename InputAdapterType>
          class LexerType = detail::basic_lexer,
          template<typename BasicJsonType>
