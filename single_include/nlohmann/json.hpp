@@ -16523,6 +16523,8 @@ char* to_chars(char* first, const char* last, FloatType value)
 
 // #include <nlohmann/detail/macro_scope.hpp>
 
+// #include <nlohmann/detail/meta/cpp_future.hpp>
+
 
 namespace nlohmann
 {
