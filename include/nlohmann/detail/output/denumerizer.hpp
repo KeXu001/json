@@ -10,6 +10,7 @@
 #include <limits> // numeric_limits
 #include <string> // char_traits
 
+#include <nlohmann/detail/conversions/to_chars.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/meta/cpp_future.hpp>
 
