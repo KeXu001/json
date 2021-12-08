@@ -11,6 +11,7 @@
 #include <string> // char_traits
 
 #include <nlohmann/detail/macro_scope.hpp>
+#include <nlohmann/detail/meta/cpp_future.hpp>
 
 namespace nlohmann
 {
