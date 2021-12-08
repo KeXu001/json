@@ -40,7 +40,7 @@ void from_json(const BasicJsonType& j, typename std::nullptr_t& n)
 // overloads for basic_json template parameters
 template < typename BasicJsonType, typename ArithmeticType,
            enable_if_t < (std::is_arithmetic<ArithmeticType>::value&&
-                         !std::is_same<ArithmeticType, typename BasicJsonType::boolean_t>::value)||
+                          !std::is_same<ArithmeticType, typename BasicJsonType::boolean_t>::value)||
                          std::is_same<ArithmeticType, typename BasicJsonType::number_unsigned_t>::value||
                          std::is_same<ArithmeticType, typename BasicJsonType::number_integer_t>::value||
                          std::is_same<ArithmeticType, typename BasicJsonType::number_float_t>::value,

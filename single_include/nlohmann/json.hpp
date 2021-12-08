@@ -4002,7 +4002,7 @@ void from_json(const BasicJsonType& j, typename std::nullptr_t& n)
 // overloads for basic_json template parameters
 template < typename BasicJsonType, typename ArithmeticType,
            enable_if_t < (std::is_arithmetic<ArithmeticType>::value&&
-                         !std::is_same<ArithmeticType, typename BasicJsonType::boolean_t>::value)||
+                          !std::is_same<ArithmeticType, typename BasicJsonType::boolean_t>::value)||
                          std::is_same<ArithmeticType, typename BasicJsonType::number_unsigned_t>::value||
                          std::is_same<ArithmeticType, typename BasicJsonType::number_integer_t>::value||
                          std::is_same<ArithmeticType, typename BasicJsonType::number_float_t>::value,
@@ -4920,9 +4920,9 @@ void to_json(BasicJsonType& j, typename BasicJsonType::string_t&& s)
     external_constructor<value_t::string>::construct(j, std::move(s));
 }
 
-template<typename BasicJsonType, typename FloatType,
-         enable_if_t< std::is_same<FloatType, typename BasicJsonType::number_float_t>::value||
-                      std::is_floating_point<FloatType>::value, int> = 0>
+template < typename BasicJsonType, typename FloatType,
+           enable_if_t< std::is_same<FloatType, typename BasicJsonType::number_float_t>::value||
+                        std::is_floating_point<FloatType>::value, int> = 0>
 void to_json(BasicJsonType& j, FloatType val) noexcept
 {
     external_constructor<value_t::number_float>::construct(j, static_cast<typename BasicJsonType::number_float_t>(val));
@@ -6710,11 +6710,11 @@ struct numerizer
     }
 
     template <typename number_float_t,
-            detail::enable_if_t<std::is_floating_point<number_float_t>::value,
-            int> = 0>
+              detail::enable_if_t<std::is_floating_point<number_float_t>::value,
+                                  int> = 0>
     static bool isfinite(number_float_t f)
     {
-      return std::isfinite(f);
+        return std::isfinite(f);
     }
 
     JSON_HEDLEY_NON_NULL(2)
@@ -24073,11 +24073,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     @brief comparison: equal
     @copydoc operator==(const_reference, const_reference)
     */
-    template<typename FamiliarNumericType, typename std::enable_if<
-                 !std::is_scalar<FamiliarNumericType>::value&&
-                 (std::is_same<FamiliarNumericType, number_unsigned_t>::value||
-                 std::is_same<FamiliarNumericType, number_integer_t>::value||
-                 std::is_same<FamiliarNumericType, number_float_t>::value), int>::type = 0>
+    template < typename FamiliarNumericType, typename std::enable_if<
+                   !std::is_scalar<FamiliarNumericType>::value&&
+                   (std::is_same<FamiliarNumericType, number_unsigned_t>::value||
+                   std::is_same<FamiliarNumericType, number_integer_t>::value||
+                   std::is_same<FamiliarNumericType, number_float_t>::value), int>::type = 0>
     friend bool operator==(const_reference lhs, FamiliarNumericType rhs) noexcept
     {
         return lhs == basic_json(rhs);
@@ -24087,11 +24087,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     @brief comparison: equal
     @copydoc operator==(const_reference, const_reference)
     */
-    template<typename FamiliarNumericType, typename std::enable_if<
-                 !std::is_scalar<FamiliarNumericType>::value&&
-                 (std::is_same<FamiliarNumericType, number_unsigned_t>::value||
-                 std::is_same<FamiliarNumericType, number_integer_t>::value||
-                 std::is_same<FamiliarNumericType, number_float_t>::value), int>::type = 0>
+    template < typename FamiliarNumericType, typename std::enable_if<
+                   !std::is_scalar<FamiliarNumericType>::value&&
+                   (std::is_same<FamiliarNumericType, number_unsigned_t>::value||
+                   std::is_same<FamiliarNumericType, number_integer_t>::value||
+                   std::is_same<FamiliarNumericType, number_float_t>::value), int>::type = 0>
     friend bool operator==(FamiliarNumericType lhs, const_reference rhs) noexcept
     {
         return basic_json(lhs) == rhs;
@@ -24146,11 +24146,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     @brief comparison: not equal
     @copydoc operator!=(const_reference, const_reference)
     */
-    template<typename FamiliarNumericType, typename std::enable_if<
-                 !std::is_scalar<FamiliarNumericType>::value&&
-                 (std::is_same<FamiliarNumericType, number_unsigned_t>::value||
-                 std::is_same<FamiliarNumericType, number_integer_t>::value||
-                 std::is_same<FamiliarNumericType, number_float_t>::value), int>::type = 0>
+    template < typename FamiliarNumericType, typename std::enable_if<
+                   !std::is_scalar<FamiliarNumericType>::value&&
+                   (std::is_same<FamiliarNumericType, number_unsigned_t>::value||
+                   std::is_same<FamiliarNumericType, number_integer_t>::value||
+                   std::is_same<FamiliarNumericType, number_float_t>::value), int>::type = 0>
     friend bool operator!=(const_reference lhs, FamiliarNumericType rhs) noexcept
     {
         return lhs != basic_json(rhs);
@@ -24160,11 +24160,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     @brief comparison: not equal
     @copydoc operator!=(const_reference, const_reference)
     */
-    template<typename FamiliarNumericType, typename std::enable_if<
-                 !std::is_scalar<FamiliarNumericType>::value&&
-                 (std::is_same<FamiliarNumericType, number_unsigned_t>::value||
-                 std::is_same<FamiliarNumericType, number_integer_t>::value||
-                 std::is_same<FamiliarNumericType, number_float_t>::value), int>::type = 0>
+    template < typename FamiliarNumericType, typename std::enable_if<
+                   !std::is_scalar<FamiliarNumericType>::value&&
+                   (std::is_same<FamiliarNumericType, number_unsigned_t>::value||
+                   std::is_same<FamiliarNumericType, number_integer_t>::value||
+                   std::is_same<FamiliarNumericType, number_float_t>::value), int>::type = 0>
     friend bool operator!=(FamiliarNumericType lhs, const_reference rhs) noexcept
     {
         return basic_json(lhs) != rhs;

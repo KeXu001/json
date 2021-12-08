@@ -33,11 +33,11 @@ struct numerizer
     }
 
     template <typename number_float_t,
-            detail::enable_if_t<std::is_floating_point<number_float_t>::value,
-            int> = 0>
+              detail::enable_if_t<std::is_floating_point<number_float_t>::value,
+                                  int> = 0>
     static bool isfinite(number_float_t f)
     {
-      return std::isfinite(f);
+        return std::isfinite(f);
     }
 
     JSON_HEDLEY_NON_NULL(2)
