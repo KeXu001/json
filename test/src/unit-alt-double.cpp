@@ -52,6 +52,18 @@ class alt_double_tpl
     : f(f_)
     {}
 
+    alt_double_tpl(std::int64_t i)
+    : f(i)
+    {}
+
+    alt_double_tpl(std::uint64_t i)
+    : f(i)
+    {}
+
+    alt_double_tpl(int i)
+    : f(i)
+    {}
+
     alt_double_tpl(const alt_double_tpl& a) = default;
 
     alt_double_tpl& operator=(const alt_double_tpl& a) = default;
