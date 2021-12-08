@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include "doctest_compatibility.h"
 
-#include <cmath>
+#include <limits>
 #include <string>
 #include <type_traits>
 
@@ -177,28 +177,14 @@ TEST_CASE("alternative double type")
 
         {
             alt_json doc;
-            doc["foo"] = alt_double(NAN);
+            doc["foo"] = alt_double(std::numeric_limits<double>::quiet_NaN());
             std::string dump = doc.dump();
             CHECK(dump == R"({"foo":null})");
         }
 
         {
             alt_json doc;
-            doc["foo"] = alt_double(INFINITY);
-            std::string dump = doc.dump();
-            CHECK(dump == R"({"foo":null})");
-        }
-
-        {
-            alt_json doc;
-            doc["foo"] = alt_double(-INFINITY);
-            std::string dump = doc.dump();
-            CHECK(dump == R"({"foo":null})");
-        }
-
-        {
-            alt_json doc;
-            doc["foo"] = alt_double(-NAN);
+            doc["foo"] = alt_double(std::numeric_limits<double>::infinity());
             std::string dump = doc.dump();
             CHECK(dump == R"({"foo":null})");
         }
