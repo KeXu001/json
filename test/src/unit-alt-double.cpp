@@ -53,11 +53,11 @@ class alt_double_tpl
     {}
 
     alt_double_tpl(std::int64_t i)
-    : f(i)
+    : f(static_cast<raw_t>(i))
     {}
 
     alt_double_tpl(std::uint64_t i)
-    : f(i)
+    : f(static_cast<raw_t>(i))
     {}
 
     alt_double_tpl(int i)
