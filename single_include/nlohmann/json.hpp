@@ -3466,8 +3466,10 @@ template<template<typename U, typename V, typename... Args> class ObjectType =
          template<typename T, typename SFINAE = void> class JSONSerializer =
          adl_serializer,
          class BinaryType = std::vector<std::uint8_t>,
-         template<typename BasicJsonType, typename InputAdapterType> class LexerType = detail::basic_lexer,
-         template<typename BasicJsonType> class SerializerType = detail::basic_serializer>
+         template<typename BasicJsonType, typename InputAdapterType>
+         class LexerType = detail::basic_lexer,
+         template<typename BasicJsonType> class SerializerType =
+         detail::basic_serializer>
 class basic_json;
 
 /*!
