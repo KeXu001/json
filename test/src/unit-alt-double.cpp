@@ -239,9 +239,12 @@ TEST_CASE("alternative double type")
 
         {
             auto doc = alt_json::parse(R"({"foo": 1.2})");
-            alt_double foo = doc["foo"];
-            CHECK(foo == alt_double(1.2));
-            CHECK(alt_double(1.2) == foo);
+            for (const auto& item : doc.items())
+            {
+                CHECK(item.key() == "foo");
+                CHECK(item.value() == alt_double(1.2));
+                CHECK(alt_double(1.2) == item.value());
+            }
         }
 
         {
@@ -269,9 +272,12 @@ TEST_CASE("alternative double type")
         {
             alt_json doc;
             doc["foo"] = alt_double(1.2);
-            alt_double foo = doc["foo"];
-            CHECK(foo == alt_double(1.2));
-            CHECK(alt_double(1.2) == foo);
+            for (const auto& item : doc.items())
+            {
+                CHECK(item.key() == "foo");
+                CHECK(item.value() == alt_double(1.2));
+                CHECK(alt_double(1.2) == item.value());
+            }
         }
 
         {
