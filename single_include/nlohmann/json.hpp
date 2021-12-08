@@ -16529,7 +16529,7 @@ namespace detail
 struct denumerizer
 {
     using number_buffer_t = std::array<char, 64>;
-    
+
     /*!
     @brief count digits
     Count the number of decimal (base 10) digits for an input unsigned integer.
@@ -16629,7 +16629,7 @@ struct denumerizer
             o->write_character('0');
             return;
         }
-        
+
         number_buffer_t number_buffer{{}};
 
         // use a pointer to fill the buffer
@@ -16715,12 +16715,12 @@ struct denumerizer
     }
 
     template <typename OutputAdapterType, typename number_float_t,
-        detail::enable_if_t<
-            std::is_floating_point<number_float_t>::value, int> = 0>
+              detail::enable_if_t<
+                  std::is_floating_point<number_float_t>::value, int> = 0>
     static void dump_float(OutputAdapterType& o, number_float_t x, std::true_type /*is_ieee_single_or_double*/)
     {
         number_buffer_t number_buffer{{}};
-      
+
         auto* begin = number_buffer.data();
         auto* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
 
