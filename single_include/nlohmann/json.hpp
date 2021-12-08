@@ -16519,6 +16519,7 @@ char* to_chars(char* first, const char* last, FloatType value)
 #include <cstddef> // size_t, ptrdiff_t
 #include <cstdio> // snprintf
 #include <limits> // numeric_limits
+#include <string> // char_traits
 
 // #include <nlohmann/detail/macro_scope.hpp>
 
