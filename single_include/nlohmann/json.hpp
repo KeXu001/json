@@ -16515,14 +16515,10 @@ char* to_chars(char* first, const char* last, FloatType value)
 #include <clocale> // localeconv, lconv
 #include <cmath> // labs, isfinite, isnan, signbit
 #include <cstddef> // size_t, ptrdiff_t
-#include <cstdint> // uint8_t
 #include <cstdio> // snprintf
 #include <limits> // numeric_limits
-#include <string> // string, char_traits
-#include <iomanip> // setfill, setw
-#include <sstream> // stringstream
-#include <type_traits> // is_same
-#include <utility> // move
+
+// #include <nlohmann/detail/macro_scope.hpp>
 
 
 namespace nlohmann
