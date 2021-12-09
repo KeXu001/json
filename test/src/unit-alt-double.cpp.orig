@@ -50,19 +50,19 @@ class alt_double_tpl
     alt_double_tpl() = default;
 
     alt_double_tpl(raw_t f_)
-        : f(f_)
+    : f(f_)
     {}
 
     alt_double_tpl(std::int64_t i)
-        : f(static_cast<raw_t>(i))
+    : f(static_cast<raw_t>(i))
     {}
 
     alt_double_tpl(std::uint64_t i)
-        : f(static_cast<raw_t>(i))
+    : f(static_cast<raw_t>(i))
     {}
 
     alt_double_tpl(int i)
-        : f(i)
+    : f(i)
     {}
 
     alt_double_tpl(const alt_double_tpl& a) = default;
