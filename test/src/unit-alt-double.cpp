@@ -75,6 +75,21 @@ class alt_double_tpl
 
     ~alt_double_tpl() = default;
 
+    operator std::int64_t() const
+    {
+        return static_cast<std::int64_t>(f);
+    }
+
+    operator std::uint64_t() const
+    {
+        return static_cast<std::uint64_t>(f);
+    }
+
+    operator int() const
+    {
+        return static_cast<int>(f);
+    }
+
     bool operator==(const alt_double_tpl& a) const
     {
         return f == a.f;
@@ -224,6 +239,17 @@ TEST_CASE("alternative double type")
             std::string dump = doc_copy.dump();
             CHECK(dump == R"({"foo":1.200000})");
         }
+
+        {
+            alt_json doc;
+            doc["foo"] = alt_double(1.2);
+
+            alt_json doc_copy;
+            doc_copy["foo"] = doc["foo"];
+
+            std::string dump = doc_copy.dump();
+            CHECK(dump == R"({"foo":1.200000})");
+        }
     }
 
     SECTION("parse")
@@ -254,12 +280,6 @@ TEST_CASE("alternative double type")
             auto doc = alt_json::parse(R"({"foo": 1.2})");
             CHECK(doc["foo"] == alt_double(1.2));
             CHECK(alt_double(1.2) == doc["foo"]);
-        }
-
-        {
-            alt_json doc = R"({"foo":1.2})"_json;
-            std::string dump = doc.dump();
-            CHECK(dump == R"({"foo":1.200000})");
         }
     }
 
