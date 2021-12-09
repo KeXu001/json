@@ -75,42 +75,42 @@ class alt_double_tpl
 
     bool operator==(const alt_double_tpl& a) const
     {
-      return f == a.f;
+        return f == a.f;
     }
 
     bool operator!=(const alt_double_tpl& a) const
     {
-      return f != a.f;
+        return f != a.f;
     }
 
     bool operator<(const alt_double_tpl& a) const
     {
-      return f < a.f;
+        return f < a.f;
     }
 
     bool operator>(const alt_double_tpl& a) const
     {
-      return f > a.f;
+        return f > a.f;
     }
 
     bool operator<=(const alt_double_tpl& a) const
     {
-      return f <= a.f;
+        return f <= a.f;
     }
 
     bool operator>=(const alt_double_tpl& a) const
     {
-      return f >= a.f;
+        return f >= a.f;
     }
 
     static bool isfinite(const alt_double_tpl& a)
     {
-      return std::isfinite(a.f);
+        return std::isfinite(a.f);
     }
 
     static std::string to_string(const alt_double_tpl& a)
     {
-      return std::to_string(a.f);
+        return std::to_string(a.f);
     }
 
   private:
@@ -121,15 +121,15 @@ using alt_double = alt_double_tpl<double>;
 
 struct alt_numerizer : nlohmann::detail::numerizer
 {
-  static void strtof(alt_double& x, const char* str, char** endptr) noexcept
-  {
-    x = alt_double(std::strtod(str, endptr));
-  }
+    static void strtof(alt_double& x, const char* str, char** endptr) noexcept
+    {
+        x = alt_double(std::strtod(str, endptr));
+    }
 
-  static bool isfinite(const alt_double& x)
-  {
-    return alt_double::isfinite(x);
-  }
+    static bool isfinite(const alt_double& x)
+    {
+        return alt_double::isfinite(x);
+    }
 };
 
 template<typename U, typename V>
@@ -137,19 +137,19 @@ using alt_lexer = nlohmann::detail::lexer<U, V, alt_numerizer>;
 
 struct alt_denumerizer : nlohmann::detail::denumerizer
 {
-  template <typename OutputAdapterType>
-  static void dump_float(OutputAdapterType& o, const alt_double& x)
-  {
-    if (!alt_double::isfinite(x))
+    template <typename OutputAdapterType>
+    static void dump_float(OutputAdapterType& o, const alt_double& x)
     {
-      o->write_characters("null", 4);
-      return;
+        if (!alt_double::isfinite(x))
+        {
+            o->write_characters("null", 4);
+            return;
+        }
+
+        std::string s(alt_double::to_string(x));
+
+        o->write_characters(s.c_str(), s.length());
     }
-
-    std::string s(alt_double::to_string(x));
-
-    o->write_characters(s.c_str(), s.length());
-  }
 };
 
 template<typename U>
