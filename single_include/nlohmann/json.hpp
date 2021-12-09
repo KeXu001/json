@@ -4921,8 +4921,8 @@ void to_json(BasicJsonType& j, typename BasicJsonType::string_t&& s)
 }
 
 template < typename BasicJsonType, typename FloatType,
-           enable_if_t< std::is_same<FloatType, typename BasicJsonType::number_float_t>::value ||
-                        std::is_floating_point<FloatType>::value, int > = 0 >
+           enable_if_t < std::is_same<FloatType, typename BasicJsonType::number_float_t>::value ||
+                         std::is_floating_point<FloatType>::value, int > = 0 >
 void to_json(BasicJsonType& j, FloatType val) noexcept
 {
     external_constructor<value_t::number_float>::construct(j, static_cast<typename BasicJsonType::number_float_t>(val));
