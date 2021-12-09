@@ -1,6 +1,8 @@
 
 #pragma once
 
+
+#include <cmath> // isfinite
 #include <cstdint> // uint64_t, int64_t
 #include <cstdlib> // strtof, strtod, strtold, strtoll, strtoull
 
