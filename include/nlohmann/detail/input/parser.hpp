@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cmath> // isfinite
 #include <cstdint> // uint8_t
 #include <functional> // function
 #include <string> // string
@@ -255,9 +254,9 @@ class parser
 
                     case token_type::value_float:
                     {
-                        const auto res = m_lexer.get_number_float();
+                        const number_float_t res = m_lexer.get_number_float();
 
-                        if (JSON_HEDLEY_UNLIKELY(!std::isfinite(res)))
+                        if (JSON_HEDLEY_UNLIKELY(!lexer_t::numerizer_t::isfinite(res)))
                         {
                             return sax->parse_error(m_lexer.get_position(),
                                                     m_lexer.get_token_string(),

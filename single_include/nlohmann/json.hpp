@@ -4001,8 +4001,11 @@ void from_json(const BasicJsonType& j, typename std::nullptr_t& n)
 
 // overloads for basic_json template parameters
 template < typename BasicJsonType, typename ArithmeticType,
-           enable_if_t < std::is_arithmetic<ArithmeticType>::value&&
-                         !std::is_same<ArithmeticType, typename BasicJsonType::boolean_t>::value,
+           enable_if_t < (std::is_arithmetic<ArithmeticType>::value&&
+                          !std::is_same<ArithmeticType, typename BasicJsonType::boolean_t>::value) ||
+                         std::is_same<ArithmeticType, typename BasicJsonType::number_unsigned_t>::value ||
+                         std::is_same<ArithmeticType, typename BasicJsonType::number_integer_t>::value ||
+                         std::is_same<ArithmeticType, typename BasicJsonType::number_float_t>::value,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
@@ -4917,8 +4920,9 @@ void to_json(BasicJsonType& j, typename BasicJsonType::string_t&& s)
     external_constructor<value_t::string>::construct(j, std::move(s));
 }
 
-template<typename BasicJsonType, typename FloatType,
-         enable_if_t<std::is_floating_point<FloatType>::value, int> = 0>
+template < typename BasicJsonType, typename FloatType,
+           enable_if_t < std::is_same<FloatType, typename BasicJsonType::number_float_t>::value ||
+                         std::is_floating_point<FloatType>::value, int > = 0 >
 void to_json(BasicJsonType& j, FloatType val) noexcept
 {
     external_constructor<value_t::number_float>::construct(j, static_cast<typename BasicJsonType::number_float_t>(val));
@@ -6672,10 +6676,14 @@ class json_sax_acceptor
 
 
 
+
+#include <cmath> // isfinite
 #include <cstdint> // uint64_t, int64_t
 #include <cstdlib> // strtof, strtod, strtold, strtoll, strtoull
 
 // #include <nlohmann/detail/macro_scope.hpp>
+
+// #include <nlohmann/detail/meta/cpp_future.hpp>
 
 
 namespace nlohmann
@@ -6701,6 +6709,14 @@ struct numerizer
     static void strtof(long double& f, const char* str, char** endptr) noexcept
     {
         f = std::strtold(str, endptr);
+    }
+
+    template <typename number_float_t,
+              detail::enable_if_t<std::is_floating_point<number_float_t>::value,
+                                  int> = 0>
+    static bool isfinite(number_float_t f)
+    {
+        return std::isfinite(f);
     }
 
     JSON_HEDLEY_NON_NULL(2)
@@ -6820,6 +6836,7 @@ class lexer : public lexer_base<BasicJsonType>
     using char_int_type = typename std::char_traits<char_type>::int_type;
 
   public:
+    using numerizer_t = NumerizerType;
     using token_type = typename lexer_base<BasicJsonType>::token_type;
 
     explicit lexer(InputAdapterType&& adapter, bool ignore_comments_ = false) noexcept
@@ -10982,7 +10999,6 @@ class binary_reader
 // #include <nlohmann/detail/input/parser.hpp>
 
 
-#include <cmath> // isfinite
 #include <cstdint> // uint8_t
 #include <functional> // function
 #include <string> // string
@@ -11244,9 +11260,9 @@ class parser
 
                     case token_type::value_float:
                     {
-                        const auto res = m_lexer.get_number_float();
+                        const number_float_t res = m_lexer.get_number_float();
 
-                        if (JSON_HEDLEY_UNLIKELY(!std::isfinite(res)))
+                        if (JSON_HEDLEY_UNLIKELY(!lexer_t::numerizer_t::isfinite(res)))
                         {
                             return sax->parse_error(m_lexer.get_position(),
                                                     m_lexer.get_token_string(),
@@ -24056,6 +24072,34 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     }
 
     /*!
+    @brief comparison: equal
+    @copydoc operator==(const_reference, const_reference)
+    */
+    template < typename FamiliarNumericType, typename std::enable_if <
+                   !std::is_scalar<FamiliarNumericType>::value&&
+                   (std::is_same<FamiliarNumericType, number_unsigned_t>::value ||
+                    std::is_same<FamiliarNumericType, number_integer_t>::value ||
+                    std::is_same<FamiliarNumericType, number_float_t>::value), int >::type = 0 >
+    friend bool operator==(const_reference lhs, FamiliarNumericType rhs) noexcept
+    {
+        return lhs == basic_json(rhs);
+    }
+
+    /*!
+    @brief comparison: equal
+    @copydoc operator==(const_reference, const_reference)
+    */
+    template < typename FamiliarNumericType, typename std::enable_if <
+                   !std::is_scalar<FamiliarNumericType>::value&&
+                   (std::is_same<FamiliarNumericType, number_unsigned_t>::value ||
+                    std::is_same<FamiliarNumericType, number_integer_t>::value ||
+                    std::is_same<FamiliarNumericType, number_float_t>::value), int >::type = 0 >
+    friend bool operator==(FamiliarNumericType lhs, const_reference rhs) noexcept
+    {
+        return basic_json(lhs) == rhs;
+    }
+
+    /*!
     @brief comparison: not equal
 
     Compares two JSON values for inequality by calculating `not (lhs == rhs)`.
@@ -24096,6 +24140,34 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename ScalarType, typename std::enable_if<
                  std::is_scalar<ScalarType>::value, int>::type = 0>
     friend bool operator!=(ScalarType lhs, const_reference rhs) noexcept
+    {
+        return basic_json(lhs) != rhs;
+    }
+
+    /*!
+    @brief comparison: not equal
+    @copydoc operator!=(const_reference, const_reference)
+    */
+    template < typename FamiliarNumericType, typename std::enable_if <
+                   !std::is_scalar<FamiliarNumericType>::value&&
+                   (std::is_same<FamiliarNumericType, number_unsigned_t>::value ||
+                    std::is_same<FamiliarNumericType, number_integer_t>::value ||
+                    std::is_same<FamiliarNumericType, number_float_t>::value), int >::type = 0 >
+    friend bool operator!=(const_reference lhs, FamiliarNumericType rhs) noexcept
+    {
+        return lhs != basic_json(rhs);
+    }
+
+    /*!
+    @brief comparison: not equal
+    @copydoc operator!=(const_reference, const_reference)
+    */
+    template < typename FamiliarNumericType, typename std::enable_if <
+                   !std::is_scalar<FamiliarNumericType>::value&&
+                   (std::is_same<FamiliarNumericType, number_unsigned_t>::value ||
+                    std::is_same<FamiliarNumericType, number_integer_t>::value ||
+                    std::is_same<FamiliarNumericType, number_float_t>::value), int >::type = 0 >
+    friend bool operator!=(FamiliarNumericType lhs, const_reference rhs) noexcept
     {
         return basic_json(lhs) != rhs;
     }
