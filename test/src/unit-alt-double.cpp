@@ -69,9 +69,11 @@ class alt_double_tpl
 
     alt_double_tpl& operator=(const alt_double_tpl& a) = default;
 
-    alt_double_tpl(alt_double_tpl&& a) = default;
+    alt_double_tpl(alt_double_tpl&& a) noexcept = default;
 
-    alt_double_tpl& operator=(alt_double_tpl&&) = default;
+    alt_double_tpl& operator=(alt_double_tpl&&) noexcept = default;
+
+    ~alt_double_tpl() = default;
 
     bool operator==(const alt_double_tpl& a) const
     {
@@ -255,7 +257,7 @@ TEST_CASE("alternative double type")
         }
 
         {
-            alt_json doc = "{\"foo\":1.2}"_json;
+            alt_json doc = R"({"foo":1.2})"_json;
             std::string dump = doc.dump();
             CHECK(dump == R"({"foo":1.200000})");
         }
@@ -282,7 +284,8 @@ TEST_CASE("alternative double type")
         }
 
         {
-            alt_json doc1, doc2;
+            alt_json doc1;
+            alt_json doc2;
             doc1["foo"] = alt_double(1.2);
             doc2["foo"] = alt_double(1.2);
             CHECK(doc1["foo"] == doc2["foo"]);
